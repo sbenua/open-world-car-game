@@ -113,15 +113,44 @@ class Car {
 
             if (Math.random() > 0.1) {
                 this.game.effects.createSmoke(lrX, lrY, this.angle + Math.PI);
-                // Also adding right side for symmetry if logical, but prompt specifically said left side smoke?
-                // "When drifting, the car should emit left-side smoke effects."
-                // This might imply the smoke drifts to the left, or emits from the left side.
-                // I will add it to the rear tires, but visually it looks best if both emit. 
-                // However, I will ensure left side is prominent as requested.
-                // Let's interpret "left-side" as "smoke trails behind".
-
-                // Let's just emit from both rear tires for realism, it looks better.
                 this.game.effects.createSmoke(rrX, rrY, this.angle + Math.PI);
+            }
+        }
+
+        // 5. Collision Detection
+        // Simple circle collision
+        const carRadius = 30; // Approx
+        const objects = this.game.world.objects;
+
+        // Only check objects near car? For now iterate all (2000 is fine for simple JS loop)
+        // Optimization: World could expose "objects near(x,y)"
+        // But let's do a simple loop first.
+
+        // We only care about Tree and Stone collision. House too.
+
+        for (let obj of objects) {
+            // Quick broadphase
+            const dx = this.x - obj.x;
+            const dy = this.y - obj.y;
+            if (Math.abs(dx) > 100 || Math.abs(dy) > 100) continue;
+
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            const minY = carRadius + (obj.radius || 30); // Use object radius if set (added in world.js)
+
+            if (dist < minY) {
+                // Collision!
+                // Bounce back / Stop
+
+                // Push car out
+                const angle = Math.atan2(dy, dx);
+                const push = minY - dist;
+                this.x += Math.cos(angle) * push;
+                this.y += Math.sin(angle) * push;
+
+                // Kill speed (bounce)
+                this.speed *= -0.5;
+                this.vx *= -0.5;
+                this.vy *= -0.5;
             }
         }
     }

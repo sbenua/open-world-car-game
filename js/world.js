@@ -14,38 +14,114 @@ class World {
         console.log("Generating world...");
 
         // Set car start position to center of world
-        this.game.car.x = this.width / 2;
-        this.game.car.y = this.height / 2;
-
-        // Randomly place objects
-        // Avoid the center where the car spawns
         const cx = this.width / 2;
         const cy = this.height / 2;
-        const safeRadius = 500;
+        this.game.car.x = cx;
+        this.game.car.y = cy;
 
-        const count = 2000; // Number of objects
+        // 1. Generate Roads (Straight paths)
+        // We'll create a grid of roads or random straight segments
+        this.roads = [];
+        const roadWidth = 200;
+        this.totalRoads = 10;
+
+        // Always have one road passing near start
+        this.roads.push({
+            x: cx - 1000, y: cy, w: 2000, h: roadWidth, type: 'horizontal'
+        });
+        this.roads.push({
+            x: cx, y: cy - 1000, w: roadWidth, h: 2000, type: 'vertical'
+        });
+
+        // Add random roads
+        for (let i = 0; i < this.totalRoads; i++) {
+            // Random horizontal or vertical
+            if (Math.random() > 0.5) {
+                // Horizontal
+                const rx = Math.random() * (this.width - 2000);
+                const ry = Math.random() * (this.height - roadWidth);
+                this.roads.push({ x: rx, y: ry, w: 2000 + Math.random() * 2000, h: roadWidth, type: 'horizontal' });
+            } else {
+                // Vertical
+                const rx = Math.random() * (this.width - roadWidth);
+                const ry = Math.random() * (this.height - 2000);
+                this.roads.push({ x: rx, y: ry, w: roadWidth, h: 2000 + Math.random() * 2000, type: 'vertical' });
+            }
+        }
+
+        // 2. Place Objects
+        const count = 3000;
+        const safeRadius = 300;
+
+        // Simple radius check function
+        const checkOverlap = (x, y, radius) => {
+            // Check against roads
+            for (let r of this.roads) {
+                if (x + radius > r.x && x - radius < r.x + r.w &&
+                    y + radius > r.y && y - radius < r.y + r.h) {
+                    return true; // Overlaps road
+                }
+            }
+
+            // Check against other objects
+            // Note: Trees can overlap stones (as per prompt "tree on top of stone is fine")
+            // But let's keep it simple: Objects shouldn't overlap if possible to look nice
+            // Prompt says: "dont make each of them on top of each other... but tree on top of stone is fine"
+            // Let's implement general avoidance but allow small overlap or just strict avoidance for simplicity first.
+            // "Tree on top of stone is fine" -> We can ignore collision check if (new=tree and old=stone)
+
+            for (let obj of this.objects) {
+                const dx = obj.x - x;
+                const dy = obj.y - y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                const minDist = obj.radius + radius;
+
+                // If overlap
+                if (dist < minDist) {
+                    // Check exception: Tree on Stone
+                    if (this.currentType === 'tree' && obj.type === 'stone') return false;
+                    return true;
+                }
+            }
+            return false;
+        };
 
         for (let i = 0; i < count; i++) {
             const x = Math.random() * this.width;
             const y = Math.random() * this.height;
 
-            // Check safe zone
+            // Check start safe zone
             const dx = x - cx;
             const dy = y - cy;
             if (dx * dx + dy * dy < safeRadius * safeRadius) continue;
 
-            const type = Math.random();
-            let objType = 'tree';
-            if (type > 0.7) objType = 'stone';
-            if (type > 0.9) objType = 'house';
+            const rand = Math.random();
+            let type = 'tree';
+            let scale = 0.3 + Math.random() * 0.3; // Smaller scale (0.3 to 0.6)
+            let radius = 30 * scale; // Approximate collision radius
 
-            this.objects.push({
-                x: x,
-                y: y,
-                type: objType,
-                angle: Math.random() * Math.PI * 2,
-                scale: 0.5 + Math.random() * 0.5
-            });
+            if (rand > 0.7) {
+                type = 'stone';
+                scale = 0.3 + Math.random() * 0.3;
+                radius = 35 * scale;
+            } else if (rand > 0.95) {
+                type = 'house';
+                scale = 0.6 + Math.random() * 0.4;
+                radius = 100 * scale;
+            }
+
+            this.currentType = type; // Hack for overlap check closure
+
+            if (!checkOverlap(x, y, radius)) {
+                this.objects.push({
+                    x: x,
+                    y: y,
+                    type: type,
+                    angle: type === 'house' ? 0 : Math.random() * Math.PI * 2,
+                    scale: scale,
+                    radius: radius
+                });
+            }
         }
     }
 
@@ -69,6 +145,40 @@ class World {
                     ctx.drawImage(ground, c * this.tileSize, r * this.tileSize, this.tileSize, this.tileSize);
                 }
             }
+        }
+
+        // 1.5 Draw Roads
+        const roadImg = this.game.assets.road;
+        if (roadImg && this.roads) {
+            this.roads.forEach(road => {
+                // Optimization: Check road bounds with camera
+                if (road.x + road.w < camX - this.game.width / 2 || road.x > camX + this.game.width / 2 ||
+                    road.y + road.h < camY - this.game.height / 2 || road.y > camY + this.game.height / 2) return;
+
+                // Tile the road texture along the segment
+                ctx.save();
+                ctx.beginPath();
+                ctx.rect(road.x, road.y, road.w, road.h);
+                ctx.clip(); // Clip to road rect
+
+                // Draw tiles covering the rect
+                const rStartCol = Math.floor(road.x / 256);
+                const rEndCol = Math.floor((road.x + road.w) / 256) + 1;
+                const rStartRow = Math.floor(road.y / 256);
+                const rEndRow = Math.floor((road.y + road.h) / 256) + 1;
+
+                for (let c = rStartCol; c < rEndCol; c++) {
+                    for (let r = rStartRow; r < rEndRow; r++) {
+                        ctx.drawImage(roadImg, c * 256, r * 256, 256, 256);
+                    }
+                }
+                ctx.restore();
+
+                // Optional: Draw borders
+                ctx.strokeStyle = '#555';
+                ctx.lineWidth = 5;
+                ctx.strokeRect(road.x, road.y, road.w, road.h);
+            });
         }
 
         // 2. Draw Objects

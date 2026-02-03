@@ -15,24 +15,36 @@ class Input {
 
     setupKeyboard() {
         window.addEventListener('keydown', (e) => {
+            let action = '';
             switch (e.key) {
-                case 'ArrowUp': case 'w': this.keys.up = true; break;
-                case 'ArrowDown': case 's': this.keys.down = true; break;
-                case 'ArrowLeft': case 'a': this.keys.left = true; break;
-                case 'ArrowRight': case 'd': this.keys.right = true; break;
-                case 'Shift': case ' ': this.keys.drift = true; break;
-                case 'b': case 'Enter': this.keys.boost = true; break;
+                case 'ArrowUp': case 'w': action = 'up'; break;
+                case 'ArrowDown': case 's': action = 'down'; break;
+                case 'ArrowLeft': case 'a': action = 'left'; break;
+                case 'ArrowRight': case 'd': action = 'right'; break;
+                case 'Shift': case ' ': action = 'drift'; break;
+                case 'b': case 'Enter': action = 'boost'; break;
+            }
+            if (action) {
+                this.keys[action] = true;
+                const btn = document.querySelector(`.control-btn[data-action="${action}"]`);
+                if (btn) btn.classList.add('active');
             }
         });
 
         window.addEventListener('keyup', (e) => {
+            let action = '';
             switch (e.key) {
-                case 'ArrowUp': case 'w': this.keys.up = false; break;
-                case 'ArrowDown': case 's': this.keys.down = false; break;
-                case 'ArrowLeft': case 'a': this.keys.left = false; break;
-                case 'ArrowRight': case 'd': this.keys.right = false; break;
-                case 'Shift': case ' ': this.keys.drift = false; break;
-                case 'b': case 'Enter': this.keys.boost = false; break;
+                case 'ArrowUp': case 'w': action = 'up'; break;
+                case 'ArrowDown': case 's': action = 'down'; break;
+                case 'ArrowLeft': case 'a': action = 'left'; break;
+                case 'ArrowRight': case 'd': action = 'right'; break;
+                case 'Shift': case ' ': action = 'drift'; break;
+                case 'b': case 'Enter': action = 'boost'; break;
+            }
+            if (action) {
+                this.keys[action] = false;
+                const btn = document.querySelector(`.control-btn[data-action="${action}"]`);
+                if (btn) btn.classList.remove('active');
             }
         });
     }
