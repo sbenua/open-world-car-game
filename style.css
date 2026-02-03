@@ -84,7 +84,6 @@ canvas {
 
 #btn-nos {
     background: rgba(255, 165, 0, 0.3);
-    /* Orange */
     border-color: rgba(255, 165, 0, 0.6);
     margin-left: 20px;
 }
@@ -197,7 +196,7 @@ canvas {
     /* Steer left (use existing #btn-left) placed on left side */
     #btn-left {
         position: fixed;
-        left: calc(env(safe-area-inset-left, 0px) + 6vw);
+        left: calc(env(safe-area-inset-left, 0px) + 1vw);
         bottom: 128px;
         width: 48px;
         height: 720px;
@@ -210,7 +209,7 @@ canvas {
     /* Steer right (use existing #btn-right) placed on right side */
     #btn-right {
         position: fixed;
-        right: calc(env(safe-area-inset-right, 0px) + 6vw);
+        right: calc(env(safe-area-inset-right, 0px) + 1vw);
         bottom: 128px;
         width: 48px;
         height: 720px;
@@ -248,7 +247,7 @@ canvas {
         gap: 8px;
     }
 
-    /* Balanced touch target sizes */
+    /* Default balanced touch target sizes for steer/brake/gas */
     .control-btn {
         width: 58px;
         height: 58px;
@@ -261,6 +260,88 @@ canvas {
         width: 56px;
         height: 56px;
         border-radius: 12px;
+    }
+
+    /* Mobile-only: Config buttons (drift/boost/nos) distinct style — pill buttons centered horizontally */
+    .control-row:not(.middle) .control-btn {
+        min-width: 76px;
+        height: 48px;
+        padding: 8px 12px;
+        font-size: 14px;
+        border-radius: 12px;
+        border: none;
+        background: rgba(0,0,0,0.45);
+        color: white;
+        font-weight: 700;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+        backdrop-filter: blur(6px);
+        transition: transform 0.08s ease, box-shadow 0.08s;
+    }
+
+    .control-row:not(.middle) .control-btn:active,
+    .control-row:not(.middle) .control-btn.active {
+        transform: translateY(2px) scale(0.98);
+        box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+        opacity: 0.95;
+    }
+
+    /* Stronger solid colors for each config button on mobile for better visibility */
+    .control-row:not(.middle) #btn-drift {
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        color: white;
+        padding: 15px 20px;
+        font-size: 14px;
+        font-weight: bold;
+        backdrop-filter: blur(5px);
+        cursor: pointer;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.1s, transform 0.1s;
+        background: rgba(50, 100, 255, 0.3);
+        border-color: rgba(50, 100, 255, 0.6);
+        margin-left: 20px;
+    }
+    .control-row:not(.middle) #btn-boost {
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        color: white;
+        padding: 15px 20px;
+        font-size: 14px;
+        font-weight: bold;
+        backdrop-filter: blur(5px);
+        cursor: pointer;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.1s, transform 0.1s;
+        background: rgba(255, 50, 50, 0.3);
+        border-color: rgba(255, 50, 50, 0.6);
+        margin-right: 20px;
+    }
+    .control-row:not(.middle) #btn-nos {
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        color: white;
+        padding: 15px 20px;
+        font-size: 14px;
+        font-weight: bold;
+        backdrop-filter: blur(5px);
+        cursor: pointer;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.1s, transform 0.1s;
+        background: rgba(255, 165, 0, 0.3);
+        border-color: rgba(255, 165, 0, 0.6);
+        margin-left: 20px;
     }
 
     /* Make sure the speedometer doesn't overlap controls on small screens */

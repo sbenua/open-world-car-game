@@ -105,24 +105,28 @@ class Car {
             currentMaxSpeed = this.baseMaxSpeed + (this.nosMaxSpeed - this.baseMaxSpeed) * t;
         }
 
-        // 1. Handling Acceleration / Braking
+        // 1. Handling Acceleration / Braking with smooth coasting (NOS/Boost compatible)
+        const coastFriction = 0.995;   // Gentle slowdown when up is released
+        const brakeFriction = 0.9;     // Strong slowdown when pressing down
+
         if (input.up) {
+            // Accelerate forward
             this.speed += this.acceleration * dt;
         } else if (input.down) {
+            // Brake / reverse
             this.speed -= this.acceleration * dt;
+            this.speed *= brakeFriction; // Stronger slowdown
         } else {
-            // Drag / Rolling resistance
-            this.speed *= 0.98;
-            if (Math.abs(this.speed) < 5) this.speed = 0;
+            // Coasting (neither up nor down)
+            this.speed *= coastFriction; // Gentle slowdown
         }
 
-        // Boost (Manual Boost button still exists, separate from NOS?)
-        // Existing boost logic:
+        // Boost (Manual Boost button still exists, separate from NOS)
         this.isBoosting = input.boost;
         if (this.isBoosting) {
             currentMaxSpeed *= this.boostMultiplier;
+
             // Emit particles when boosting
-            // Center rear emission
             const rearX = this.x - Math.cos(this.angle) * 30;
             const rearY = this.y - Math.sin(this.angle) * 30;
             if (Math.random() < 0.3) {
@@ -130,7 +134,10 @@ class Car {
             }
         }
 
-        // Cap speed
+        // Stop very small speeds to avoid sliding forever
+        if (Math.abs(this.speed) < 10) this.speed = 0;
+
+        // Cap speed according to current max (handles NOS & boost)
         if (this.speed > currentMaxSpeed) this.speed = currentMaxSpeed;
         if (this.speed < -currentMaxSpeed / 2) this.speed = -currentMaxSpeed / 2;
 
