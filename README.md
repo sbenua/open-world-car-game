@@ -37,3 +37,4 @@ A 2D open-world car game optimized for mobile browsers, built with vanilla JavaS
 | Steer  | Arrows / WASD | D-Pad |
 | Drift  | Shift / Space | Drift Button |
 | Boost  | Enter / B | Boost Button |
+| NOS    | N | NOS Button |

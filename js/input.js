@@ -24,6 +24,7 @@ class Input {
                 case 'ArrowRight': case 'd': action = 'right'; break;
                 case 'Shift': case ' ': action = 'drift'; break;
                 case 'b': case 'Enter': action = 'boost'; break;
+                case 'n': action = 'nos'; break;
             }
             if (action) {
                 this.keys[action] = true;
@@ -41,6 +42,7 @@ class Input {
                 case 'ArrowRight': case 'd': action = 'right'; break;
                 case 'Shift': case ' ': action = 'drift'; break;
                 case 'b': case 'Enter': action = 'boost'; break;
+                case 'n': action = 'nos'; break;
             }
             if (action) {
                 this.keys[action] = false;

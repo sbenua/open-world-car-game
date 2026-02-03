@@ -42,6 +42,13 @@ class Car {
             this.nosTimer = this.nosDuration;
 
             // Start cooldown immediately as per interpreted request "loading started when button pressed"
+            // Instant acceleration to max speed
+            this.speed = this.nosMaxSpeed;
+
+            // Bypass inertia/grip smoothing so velocity is instant
+            this.vx = Math.cos(this.angle) * this.speed;
+            this.vy = Math.sin(this.angle) * this.speed;
+
             // Cooldown is random 10-30s
             this.nosCooldown = 10 + Math.random() * 20;
 
