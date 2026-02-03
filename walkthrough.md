@@ -28,10 +28,11 @@ A 2D open-world car game optimized for mobile browsers. The game features a proc
 - **WASD / Arrows**: Drive and Steer
 - **Shift / Space**: Drift
 - **Enter / B**: Boost
+- **N**: NOS
 
 ### Mobile
 - **Left D-Pad**: Touch arrows to drive and steer.
-- **Right Buttons**: Tap 'Drift' to slide, 'Boost' for speed.
+- **Right Buttons**: Tap 'Drift' to slide, 'Boost' for speed, 'NOS' for extra speed.
 
 ## Verification
 The game has been verified to load correctly in a local browser environment.
@@ -40,12 +41,11 @@ The game has been verified to load correctly in a local browser environment.
 - Controls are interactive with visual feedback.
 - Roads and obstacles render correctly.
 
-### Gameplay Screenshot
+### Early Gameplay Screenshot
 ![Single Vertical Endless Road](screenshots/gameplay.png)
 
-### NOS Feature Verification
-![NOS Active UI](screenshots/nos_verification.png)
-*screenshot demonstrating the NOS button entering cooldown state after activation via 'N' key.*
+### Final Build Gameplay Screenshot
+![NOS Active UI](screenshots/final.png)
 
 ## Tech Stack
 - **HTML5 Canvas**: For high-performance 2D rendering.

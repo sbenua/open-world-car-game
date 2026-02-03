@@ -13,6 +13,8 @@ Create a 2D open-world car game optimized for mobile browsers. The game features
 - **[style.css](style.css)**: Full-screen styling and touch-action handling.
 - **[README.md](README.md)**: Project overview.
 - **[troubleshoot.md](troubleshoot.md)**: Log of technical issues and fixes.
+- **[walkthrough.md](walkthrough.md)**: Walkthrough of the game first build until final release.
+- **[LICENSE](LICENSE)**: MIT License.
 
 ### JavaScript Logic (`js/`)
 - **[game.js](js/game.js)**: Main `Game` class. Handles loop, resizing, and asset loading.

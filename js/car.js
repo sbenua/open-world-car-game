@@ -117,8 +117,6 @@ class Car {
         }
 
         // Boost (Manual Boost button still exists, separate from NOS?)
-        // User asked for "NOS button", assumed replacing or adding.
-        // "now add a new button as NOS button" -> Addition.
         // Existing boost logic:
         this.isBoosting = input.boost;
         if (this.isBoosting) {
@@ -176,7 +174,7 @@ class Car {
             const cos = Math.cos(this.angle);
             const sin = Math.sin(this.angle);
 
-            // Left Side Smoke (as requested: "car should emit left-side smoke effects" - interpreted as left rear tire?)
+            // Left Side Smoke: car should emit left-side smoke effects
             // Actually request says "left-side smoke effects". I'll put it on the left rear tire.
 
             // Offset for left rear tire relative to center

@@ -1,8 +1,8 @@
 # Open World Car Game
 
-A 2D open-world car game optimized for mobile browsers, built with vanilla JavaScript and HTML5 Canvas.
+A 2D open-world car game optimized for mobile browsers, built with JavaScript and HTML5.
 
-![Game Check](screenshots/nos_verification.png)
+![Game Check](screenshots/final.png)
 
 ## Features
 - **Procedural Infinite World**:
@@ -13,7 +13,6 @@ A 2D open-world car game optimized for mobile browsers, built with vanilla JavaS
     - **Boost**: Temporary speed burst.
     - **NOS**: Instantly jumps to Triple Max Speed for 2s, 5s fade, with random 10-30s cooldown.
     - **Auto-Collision**: Bouncing off obstacles.
-    - **Auto-Collision**: Bouncing off obstacles.
 - **Mobile Controls**: On-screen D-Pad and action buttons.
 - **UI**:
     - **Speedometer**: Real-time speed display in km/h.
@@ -21,6 +20,7 @@ A 2D open-world car game optimized for mobile browsers, built with vanilla JavaS
 ## Documentation
 - **[Implementation Plan](implementation_plan.md)**: Details the architecture and file structure.
 - **[Troubleshooting Log](troubleshoot.md)**: Notes on bugs encountered (e.g., asset loading issues) and their fixes.
+- **[Walkthrough] (walkthrough.md)**: Walkthrough of the game first build until final release.
 
 ## How to Run
 1. Clone the repo.
@@ -28,7 +28,8 @@ A 2D open-world car game optimized for mobile browsers, built with vanilla JavaS
    ```bash
    python3 -m http.server
    ```
-3. Open `http://localhost:8000` in your browser.
+3. Check and configure the port
+4. Open `http://localhost:port` in your browser.
 
 ## Controls
 | Action | Keyboard | Mobile |
