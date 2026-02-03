@@ -20,7 +20,7 @@ A 2D open-world car game optimized for mobile browsers, built with JavaScript an
 ## Documentation
 - **[Implementation Plan](implementation_plan.md)**: Details the architecture and file structure.
 - **[Troubleshooting Log](troubleshoot.md)**: Notes on bugs encountered (e.g., asset loading issues) and their fixes.
-- **[Walkthrough] (walkthrough.md)**: Walkthrough of the game first build until final release.
+- **[Walkthrough](walkthrough.md)**: Walkthrough of the game first build until final release.
 
 ## How to Run
 1. Clone the repo.
