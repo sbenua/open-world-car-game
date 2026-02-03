@@ -58,6 +58,7 @@ class Car {
 
     update(dt) {
         const input = this.game.input.keys;
+        const isMobile = this.game.input.isMobile;
 
         // NOS Logic
         if (input.nos && this.nosState === 'ready') {
@@ -109,20 +110,37 @@ class Car {
         const coastFriction = 0.995;   // Gentle slowdown when up is released
         const brakeFriction = 0.9;     // Strong slowdown when pressing down
 
-        if (input.up) {
-            // Accelerate forward
+        if (isMobile) {
+            // Mobile: Always accelerate, no separate acceleration button
             this.speed += this.acceleration * dt;
-        } else if (input.down) {
-            // Brake / reverse
-            this.speed -= this.acceleration * dt;
-            this.speed *= brakeFriction; // Stronger slowdown
+            
+            // Brake button (remapped from boost button) applies strong deceleration
+            if (input.boost) {
+                // Brake (full braking force)
+                this.speed -= this.acceleration * dt;
+                this.speed *= brakeFriction;
+            } else {
+                // Coasting (gentle slowdown)
+                this.speed *= coastFriction;
+            }
         } else {
-            // Coasting (neither up nor down)
-            this.speed *= coastFriction; // Gentle slowdown
+            // Web/Desktop: Original behavior
+            if (input.up) {
+                // Accelerate forward
+                this.speed += this.acceleration * dt;
+            } else if (input.down) {
+                // Brake / reverse
+                this.speed -= this.acceleration * dt;
+                this.speed *= brakeFriction; // Stronger slowdown
+            } else {
+                // Coasting (neither up nor down)
+                this.speed *= coastFriction; // Gentle slowdown
+            }
         }
 
-        // Boost (Manual Boost button still exists, separate from NOS)
-        this.isBoosting = input.boost;
+        // Boost (Manual Boost button still exists on desktop, separate from NOS)
+        // On mobile, boost button is remapped to brake so this is skipped for mobile
+        this.isBoosting = !isMobile && input.boost;
         if (this.isBoosting) {
             currentMaxSpeed *= this.boostMultiplier;
 

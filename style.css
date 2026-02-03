@@ -21,6 +21,15 @@ canvas {
     height: 100vh;
 }
 
+/* Hide up/down acceleration & brake buttons on mobile */
+@media (max-width: 767px) {
+    #btn-up,
+    /*#btn-down,*/
+    #btn-boost{
+        display: none !important;
+    }
+}
+
 #controls {
     position: absolute;
     bottom: 20px;
@@ -171,7 +180,7 @@ canvas {
     .control-row:not(.middle) {
         position: fixed;
         left: 50%;
-        bottom: calc(18px + 72px + 12px); /* above steers and bottom buttons */
+        bottom: 24px;
         transform: translateX(-50%);
         display: flex;
         flex-direction: row;
@@ -181,6 +190,70 @@ canvas {
         z-index: 60;
         background: transparent;
         width: auto;
+    }
+
+    /* Individual button styling for mobile */
+    #btn-drift {
+        position: absolute;
+        left: 50%;
+        bottom: 24px;
+        transform: translateX(calc(-50% + 130px));
+        width: 60px;
+        height: 60px;
+        padding: 0;
+        font-size: 14px;
+        border-radius: 12px;
+        background: rgba(50, 100, 255, 0.3);
+        border: 2px solid rgba(50, 100, 255, 0.6);
+        color: white;
+        font-weight: bold;
+        pointer-events: auto;
+        z-index: 60;
+    }
+
+    #btn-boost {
+        position: absolute;
+        left: 50%;
+        bottom: 24px;
+        transform: translateX(calc(-50% - 145px));
+        width: 60px;
+        height: 60px;
+        padding: 0;
+        font-size: 14px;
+        border-radius: 12px;
+        background: rgba(255, 50, 50, 0.3);
+        border: 2px solid rgba(255, 50, 50, 0.6);
+        color: white;
+        font-weight: bold;
+        pointer-events: auto;
+        z-index: 60;
+    }
+
+    #btn-boost::before {
+        content: "";
+    }
+
+    #btn-boost::after {
+        content: attr(data-action);
+        display: none;
+    }
+
+    #btn-nos {
+        position: absolute;
+        left: 50%;
+        bottom: 24px;
+        transform: translateX(calc(-50% - 20px));
+        width: 60px;
+        height: 60px;
+        padding: 0;
+        font-size: 14px;
+        border-radius: 12px;
+        background: rgba(255, 165, 0, 0.3);
+        border: 2px solid rgba(255, 165, 0, 0.6);
+        color: white;
+        font-weight: bold;
+        pointer-events: auto;
+        z-index: 60;
     }
 
     /* D-Pad container collapsed; we'll position children individually */
@@ -222,10 +295,10 @@ canvas {
     /* Brake on left bottom (use existing #btn-down) */
     #btn-down {
         position: fixed;
-        left: calc(env(safe-area-inset-left, 0px) + 6vw);
-        bottom: 18px;
-        width: 72px;
-        height: 72px;
+        left: calc(env(safe-area-inset-left, 0px) + 2vw);
+        bottom: 48px;
+        width: 65px;
+        height: 60px;
         border-radius: 14px;
         pointer-events: auto;
         z-index: 70;
@@ -284,67 +357,6 @@ canvas {
         box-shadow: 0 3px 8px rgba(0,0,0,0.5);
         opacity: 0.95;
     }
-
-    /* Stronger solid colors for each config button on mobile for better visibility */
-    .control-row:not(.middle) #btn-drift {
-        background: rgba(255, 255, 255, 0.2);
-        border: 2px solid rgba(255, 255, 255, 0.5);
-        color: white;
-        padding: 15px 20px;
-        font-size: 14px;
-        font-weight: bold;
-        backdrop-filter: blur(5px);
-        cursor: pointer;
-        width: 60px;
-        height: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: background 0.1s, transform 0.1s;
-        background: rgba(50, 100, 255, 0.3);
-        border-color: rgba(50, 100, 255, 0.6);
-        margin-left: 20px;
-    }
-    .control-row:not(.middle) #btn-boost {
-        background: rgba(255, 255, 255, 0.2);
-        border: 2px solid rgba(255, 255, 255, 0.5);
-        color: white;
-        padding: 15px 20px;
-        font-size: 14px;
-        font-weight: bold;
-        backdrop-filter: blur(5px);
-        cursor: pointer;
-        width: 60px;
-        height: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: background 0.1s, transform 0.1s;
-        background: rgba(255, 50, 50, 0.3);
-        border-color: rgba(255, 50, 50, 0.6);
-        margin-right: 20px;
-    }
-    .control-row:not(.middle) #btn-nos {
-        background: rgba(255, 255, 255, 0.2);
-        border: 2px solid rgba(255, 255, 255, 0.5);
-        color: white;
-        padding: 15px 20px;
-        font-size: 14px;
-        font-weight: bold;
-        backdrop-filter: blur(5px);
-        cursor: pointer;
-        width: 60px;
-        height: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: background 0.1s, transform 0.1s;
-        background: rgba(255, 165, 0, 0.3);
-        border-color: rgba(255, 165, 0, 0.6);
-        margin-left: 20px;
-    }
-
-    /* Make sure the speedometer doesn't overlap controls on small screens */
     #speedometer {
         top: 14px;
         left: 50%;

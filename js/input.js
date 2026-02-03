@@ -10,6 +10,8 @@ class Input {
             nos: false
         };
 
+        this.isMobile = window.innerWidth <= 767;
+
         this.setupKeyboard();
         this.setupTouch();
     }
@@ -18,8 +20,8 @@ class Input {
         window.addEventListener('keydown', (e) => {
             let action = '';
             switch (e.key) {
-                case 'ArrowUp': case 'w': action = 'up'; break;
-                case 'ArrowDown': case 's': action = 'down'; break;
+                case 'ArrowUp': case 'w': action = this.isMobile ? '' : 'up'; break;
+                case 'ArrowDown': case 's': action = this.isMobile ? '' : 'down'; break;
                 case 'ArrowLeft': case 'a': action = 'left'; break;
                 case 'ArrowRight': case 'd': action = 'right'; break;
                 case 'Shift': case ' ': action = 'drift'; break;
@@ -36,8 +38,8 @@ class Input {
         window.addEventListener('keyup', (e) => {
             let action = '';
             switch (e.key) {
-                case 'ArrowUp': case 'w': action = 'up'; break;
-                case 'ArrowDown': case 's': action = 'down'; break;
+                case 'ArrowUp': case 'w': action = this.isMobile ? '' : 'up'; break;
+                case 'ArrowDown': case 's': action = this.isMobile ? '' : 'down'; break;
                 case 'ArrowLeft': case 'a': action = 'left'; break;
                 case 'ArrowRight': case 'd': action = 'right'; break;
                 case 'Shift': case ' ': action = 'drift'; break;
