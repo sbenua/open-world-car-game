@@ -8,14 +8,15 @@ class World {
         // Map bounds in pixels
         this.width = this.tileSize * this.mapSize;
         this.height = this.tileSize * this.mapSize;
-
-        // Set car start position to center of world
-        this.game.car.x = this.width / 2;
-        this.game.car.y = this.height / 2;
     }
 
     generate() {
         console.log("Generating world...");
+
+        // Set car start position to center of world
+        this.game.car.x = this.width / 2;
+        this.game.car.y = this.height / 2;
+
         // Randomly place objects
         // Avoid the center where the car spawns
         const cx = this.width / 2;
