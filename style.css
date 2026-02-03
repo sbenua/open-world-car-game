@@ -4,7 +4,8 @@
     box-sizing: border-box;
     user-select: none;
     -webkit-user-select: none;
-    touch-action: none; /* Prevent browser zooming/panning */
+    touch-action: none;
+    /* Prevent browser zooming/panning */
 }
 
 body {
@@ -25,7 +26,8 @@ canvas {
     bottom: 20px;
     left: 0;
     width: 100%;
-    pointer-events: none; /* Let touches pass through to buttons but not container */
+    pointer-events: none;
+    /* Let touches pass through to buttons but not container */
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -62,7 +64,8 @@ canvas {
     transition: background 0.1s, transform 0.1s;
 }
 
-.control-btn:active, .control-btn.active {
+.control-btn:active,
+.control-btn.active {
     background: rgba(255, 255, 255, 0.5);
     transform: scale(0.95);
 }
@@ -77,6 +80,21 @@ canvas {
     background: rgba(50, 100, 255, 0.3);
     border-color: rgba(50, 100, 255, 0.6);
     margin-left: 20px;
+}
+
+#btn-nos {
+    background: rgba(255, 165, 0, 0.3);
+    /* Orange */
+    border-color: rgba(255, 165, 0, 0.6);
+    margin-left: 20px;
+}
+
+#btn-nos.disabled {
+    background: rgba(100, 100, 100, 0.3);
+    border-color: rgba(100, 100, 100, 0.3);
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: default;
 }
 
 .dpad {
@@ -107,11 +125,11 @@ canvas {
     .control-row {
         width: auto;
     }
-    
+
     .dpad {
         order: 1;
     }
-    
+
     /* Move drift/boost to right side */
     .control-row:not(.middle) {
         order: 2;

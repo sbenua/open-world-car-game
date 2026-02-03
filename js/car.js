@@ -19,6 +19,15 @@ class Car {
         this.isBoosting = false;
         this.boostMultiplier = 1.5;
 
+        // NOS Properties
+        this.nosState = 'ready'; // ready, active, fading, cooldown
+        this.nosTimer = 0;
+        this.nosDuration = 2.0; // 2 seconds active triple speed
+        this.nosFadeDuration = 5.0; // 5 seconds fade out
+        this.nosCooldown = 0; // Will be set randomly
+        this.baseMaxSpeed = this.maxSpeed; // Store original
+        this.nosMaxSpeed = this.maxSpeed * 3;
+
         // Velocity vector components (for drifting momentum)
         this.vx = 0;
         this.vy = 0;
@@ -27,8 +36,67 @@ class Car {
         this.height = 100; // Approximate collision box
     }
 
+    activateNOS() {
+        if (this.nosState === 'ready') {
+            this.nosState = 'active';
+            this.nosTimer = this.nosDuration;
+
+            // Start cooldown immediately as per interpreted request "loading started when button pressed"
+            // Cooldown is random 10-30s
+            this.nosCooldown = 10 + Math.random() * 20;
+
+            console.log(`NOS Activated! Cooldown for ${this.nosCooldown.toFixed(1)}s`);
+        }
+    }
+
     update(dt) {
         const input = this.game.input.keys;
+
+        // NOS Logic
+        if (input.nos && this.nosState === 'ready') {
+            this.activateNOS();
+        }
+
+        // NOS State Machine
+        if (this.nosState === 'active') {
+            this.nosTimer -= dt;
+            if (this.nosTimer <= 0) {
+                this.nosState = 'fading';
+                this.nosTimer = this.nosFadeDuration;
+            }
+        } else if (this.nosState === 'fading') {
+            this.nosTimer -= dt;
+            if (this.nosTimer <= 0) {
+                // Determine next state based on cooldown
+                // If cooldown is still running (very likely since 10s+ > 2+5s), we go to cooldown state logically
+                // But actually we just check cooldown variable
+                this.nosState = 'cooldown';
+            }
+        }
+
+        // Cooldown timer runs independently once activated
+        if (this.nosCooldown > 0) {
+            this.nosCooldown -= dt;
+            if (this.nosCooldown <= 0) {
+                this.nosCooldown = 0;
+                this.nosState = 'ready';
+            } else if (this.nosState === 'cooldown') {
+                // Just waiting
+            }
+        }
+
+        // Calculate Max Speed based on NOS
+        let currentMaxSpeed = this.baseMaxSpeed;
+
+        if (this.nosState === 'active') {
+            currentMaxSpeed = this.nosMaxSpeed;
+        } else if (this.nosState === 'fading') {
+            // Linear fade from Triple to Normal
+            // Timer goes from 5.0 down to 0.0
+            // Factor goes from 1.0 (start of fade) to 0.0 (end)
+            const t = this.nosTimer / this.nosFadeDuration;
+            currentMaxSpeed = this.baseMaxSpeed + (this.nosMaxSpeed - this.baseMaxSpeed) * t;
+        }
 
         // 1. Handling Acceleration / Braking
         if (input.up) {
@@ -41,9 +109,11 @@ class Car {
             if (Math.abs(this.speed) < 5) this.speed = 0;
         }
 
-        // Boost
+        // Boost (Manual Boost button still exists, separate from NOS?)
+        // User asked for "NOS button", assumed replacing or adding.
+        // "now add a new button as NOS button" -> Addition.
+        // Existing boost logic:
         this.isBoosting = input.boost;
-        let currentMaxSpeed = this.maxSpeed;
         if (this.isBoosting) {
             currentMaxSpeed *= this.boostMultiplier;
             // Emit particles when boosting

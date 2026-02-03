@@ -105,15 +105,9 @@ class Game {
     updateHUD() {
         const speedEl = document.getElementById('speedometer');
         if (speedEl) {
-            let displaySpeed = this.car.speed;
-
-            // User Request: Instantly show max value if NOS is active
-            if (this.car.nosState === 'active') {
-                displaySpeed = this.car.nosMaxSpeed;
-            }
-
-            // Convert pixels/sec to arbitrary km/h (using 10 as divisor per user pref)
-            const kmh = Math.abs(Math.round(displaySpeed / 10));
+            // Convert pixels/sec to arbitrary km/h
+            // 800 roughly -> 200 km/h
+            const kmh = Math.abs(Math.round(this.car.speed / 10));
             speedEl.innerText = `${kmh} km/h`;
         }
 

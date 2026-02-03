@@ -6,7 +6,8 @@ class Input {
             left: false,
             right: false,
             drift: false,
-            boost: false
+            boost: false,
+            nos: false
         };
 
         this.setupKeyboard();

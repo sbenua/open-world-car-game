@@ -12,6 +12,7 @@ A 2D open-world car game optimized for mobile browsers, built with vanilla JavaS
 - **Arcade Physics**:
     - **Drift**: Slide around corners with smoke effects.
     - **Boost**: Temporary speed burst.
+    - **NOS**: Instantly jumps to Triple Max Speed for 2s, 5s fade, with random 10-30s cooldown.
     - **Auto-Collision**: Bouncing off obstacles.
     - **Auto-Collision**: Bouncing off obstacles.
 - **Mobile Controls**: On-screen D-Pad and action buttons.
